@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from sklearn import model_selection, neighbors
-
+#to the uci dataset we add the attributes row and then use that in this example.
 df= pd.read_csv('dataset/prima-indians-diabetes.txt')
 
 x= np.array(df.drop(['Class variable'],1))
@@ -11,6 +11,7 @@ y= np.array(df['Class variable'])
 x_train, x_test, y_train, y_test= model_selection.train_test_split(x,y,test_size=0.2)
 
 clf=neighbors.KNeighborsClassifier()
+#IF K NOT MENTIONED , AUTOMATICALLY TAKE K AS 5
 clf.fit(x_train, y_train)
 
 accuracy=clf.score(x_test,y_test)
