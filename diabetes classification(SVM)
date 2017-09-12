@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 from sklearn import model_selection, svm
+from sklearn.metrics import confusion_matrix
+
 #to the uci dataset we add the attributes row and then use that in this example.
 df= pd.read_csv('dataset/prima-indians-diabetes.txt')
 
@@ -13,6 +15,12 @@ clf= svm.SVC(gamma=0.00001,C=10)
 
 clf.fit(x_train, y_train)
 
-accuracy=clf.score(x_test,y_test)
-print(accuracy)
-#75 to 80% accuracy
+#accuracy
+print(clf.score(x_test,y_test))
+
+y_pred= clf.predict(x_test)
+print(confusion_matrix(y_test, y_pred))
+
+#0.831168831169
+#[[96 10]
+ #[16 32]]
