@@ -21,6 +21,15 @@ print(clf.score(x_test,y_test))
 y_pred= clf.predict(x_test)
 print(confusion_matrix(y_test, y_pred))
 
+report = classification_report(y_test, y_pred)
+print(report)
+
 #0.831168831169
 #[[96 10]
  #[16 32]]
+   precision    recall  f1-score   support
+
+          0       0.73      0.92      0.81        96
+          1       0.76      0.43      0.55        58
+
+avg / total       0.74      0.73      0.71       154
