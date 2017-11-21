@@ -1,0 +1,21 @@
+from sklearn import model_selection , neighbors
+import numpy as np
+import pandas as pd
+
+#when you download the data u should add the columns heading maually, make sure no space between charactwers and no comma after one column 
+# we are importing the text file as read_csv and putting that into dataframe which is sort of a table 
+df= pd.read_csv("documents/iris.data.txt")
+
+#we are assigning the class column to y and before assigning converting it into numpy array 
+y= np.array(df['class'])
+
+#we are converting dataframe into numpy array and dropping the class cloumn 
+x=np.array(df.drop(['class'],1))
+
+x_train, x_test, y_train, y_test= model_selection.train_test_split(x, y)
+model= neighbors.KNeighborsClassifier()
+model.fit(x_train, y_train)
+accuracy= model.score(x_test, y_test)
+print(accuracy)
+
+0.973684210526
