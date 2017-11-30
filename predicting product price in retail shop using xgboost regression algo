@@ -1,3 +1,6 @@
+#dataset from analytics vidhya black friday hackathon 
+# https://datahack.analyticsvidhya.com/contest/black-friday/ 
+
 from sklearn import linear_model, preprocessing, metrics, model_selection
 
 #xgboost is used both for regression and classification. its basically extreme bossting the decision tree algo to increase speed and performance.
