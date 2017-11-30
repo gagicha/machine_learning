@@ -1,0 +1,36 @@
+from sklearn import linear_model, preprocessing, metrics, model_selection
+
+#xgboost is used both for regression and classification. its basically extreme bossting the decision tree algo to increase speed and performance.
+import pandas as pd
+import numpy as np
+from xgboost import XGBRegressor
+
+# to convert non numeric data into numeric data label encoder or one hot encoder is used
+
+df= pd.read_csv("downloads/retail_purchase_train.csv")
+
+for column in df.columns:
+    if df[column].dtype == type(object):
+        le = preprocessing.LabelEncoder()
+        df[column] = le.fit_transform(df[column])
+        
+df= df.drop(['Product_Category_3', 'Product_Category_2'],1)
+y=np.array(df['Purchase'])
+x= np.array(df.drop(['Purchase'],1))
+train_x, test_x, train_y, test_y= model_selection.train_test_split(x,y)
+
+# as its a regression problem, XGBRegressor is used, for classification XGBClassifier is used. 
+xgb= XGBRegressor()
+xgb.fit(train_x, train_y)
+pred_y_xgb= xgb.predict(test_x)
+
+#as its a regression problem has accuracy camt be used instead mean squared error is used.
+print(metrics.mean_squared_error(test_y, pred_y_xgb))
+8562527.78075
+
+#r2 score tells the variance , if it close to 1 means prediction is close to actual output
+print(metrics.r2_score(test_y, pred_y_xgb))
+0.660503819979
+
+df= pd.DataFrame(pred_y_xgb, test_y)
+df
