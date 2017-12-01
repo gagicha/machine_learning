@@ -1,0 +1,72 @@
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing, model_selection, tree, neighbors,metrics,svm 
+from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
+
+df= pd.read_csv("downloads/train_loan_prediction.csv")
+
+#we have to fill na values, with the max times pccurence in that category, missing values are considered to be floats
+#hence we have to first the missing values as they are float and the rest categories are string, hence they cannot be compared.
+df.Gender.fillna(df.Gender.dropna().max(),inplace =True)
+df.Gender.fillna(df.Married.dropna().max(),inplace =True)
+df.Self_Employed.fillna(df.Self_Employed.dropna().max(),inplace =True)
+
+# after filling majority of the categories we will drop the missing values now. 
+#these missing values will cause problem in conversion during label enoder phase
+df.dropna(inplace=True)
+
+
+for column in df.columns:
+    if df[column].dtype == type(object):
+        le = preprocessing.LabelEncoder()
+        df[column] = le.fit_transform(df[column])
+        
+y= np.array(df['Loan_Status'])
+x=np.array(df.drop(['Loan_Status'],1))
+train_x, test_x, train_y, test_y= model_selection.train_test_split(x,y)
+
+xgb = XGBClassifier()
+knn = neighbors.KNeighborsClassifier()
+svm = svm.SVC()
+tree= tree.DecisionTreeClassifier()
+rf= RandomForestClassifier()
+nb= GaussianNB()
+nn= MLPClassifier()
+
+
+# comparing 7 classification algorithms 
+xgb.fit(train_x,train_y)
+nb.fit(train_x, train_y)
+rf.fit(train_x, train_y)
+tree.fit(train_x, train_y)
+knn.fit(train_x, train_y)
+svm.fit(train_x, train_y)
+nn.fit(train_x, train_y)
+
+# comparing accuracies of all models
+print(xgb.score(test_x, test_y))
+print(nb.score(test_x, test_y))
+print(rf.score(test_x, test_y))
+print(tree.score(test_x, test_y))
+print(svm.score(test_x, test_y))
+print(knn.score(test_x, test_y))
+print(nn.score(test_x, test_y))
+
+0.807692307692
+0.784615384615
+0.784615384615
+0.761538461538
+0.692307692308
+0.646153846154
+0.684615384615
+
+# xgboost, naive bayes, random forest, decision tress are the best performers for this classification 
+# confusion matrix and classification_report are some other metrices other than accuracy. 
+print(metrics.confusion_matrix(test_y, xgb.predict(test_x)))
+print(metrics.classification_report(test_y, xgb.predict(test_x)))
+
+#results = model_selection.cross_val_score(xgb, x, y, scoring="accuracy")
+#print(results.mean())
