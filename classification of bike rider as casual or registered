@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing, metrics, model_selection 
+from xgboost import XGBClassifier 
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+
+df= pd.read_csv("downloads/2016-Q4-Trips-History-Data.csv")
+df.dropna(inplace=True)
+
+le= preprocessing.LabelEncoder()
+df['Bike number']= le.fit_transform(df['Bike number'])
+df= df.drop(['Start station', 'End station', 'Start date', 'End date'],1)
+
+x= np.array(df.drop(['Member Type'],1))
+y= np.array(df['Member Type'])
+
+train_x, test_x, train_y, test_y= model_selection.train_test_split(x,y)
+
+xgb= XGBClassifier()
+nb= GaussianNB()
+rf= RandomForestClassifier()
+
+xgb.fit(train_x, train_y)
+nb.fit(train_x, train_y)
+rf.fit(train_x, train_y)
+
+print(xgb.score(test_x, test_y))
+print(nb.score(test_x, test_y))
+print(rf.score(test_x, test_y))
+
+0.881131106465
+0.836823730203
+0.885338258104
+
+pred_y= rf.predict(test_x)
+print(metrics.confusion_matrix(test_y, pred_y))
+
+[[ 24686  13890]
+ [  8213 145978]]
