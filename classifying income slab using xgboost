@@ -1,0 +1,30 @@
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing, metrics, model_selection 
+from xgboost import XGBClassifier 
+
+colnames=['age', 'worker_class', 'industry_code', 'occupation_code', 'gross_income','education','wage_per_hr','enrolled','marital_status','major_industry_code','major_occupation_code','mace','origin','sex','memeber_labor','unemployment_reason','emp_status','capgain','caploss','dividend','fedtax','tax_filter','pre_residence_reg','pre_residence_state','hhdfmx','hhdrel','weight','migmtr1','migmtr3','migmtr4','migsame','migsum','noemp','nounder18','earnings','country_father','country_mother','country_self','citizenship','income','self_employed','taxable_amount']
+
+df= pd.read_csv("downloads/census/census-income.data", names=colnames, header=None)
+test=pd.read_csv("downloads/census/census-income.test", names=colnames, header=None)
+
+for column in df.columns:
+    if df[column].dtype == type(object):
+        le = preprocessing.LabelEncoder()
+        df[column] = le.fit_transform(df[column])
+        
+for column in test.columns:
+    if test[column].dtype == type(object):
+        le = preprocessing.LabelEncoder()
+        test[column] = le.fit_transform(test[column])
+        
+train_y= df['taxable_amount']
+train_x= df.drop(['taxable_amount'],1)
+test_y= test['taxable_amount']
+test_x= test.drop(['taxable_amount'],1)
+
+xgb= XGBClassifier()
+xgb.fit(train_x, train_y)
+xgb.score(test_x, test_y)
+
+0.95150458090254808
