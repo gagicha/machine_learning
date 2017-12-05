@@ -1,0 +1,22 @@
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing, metrics, model_selection 
+from xgboost import XGBRegressor 
+
+df= pd.read_csv("downloads/YearPredictionMSD.txt")
+x_train= df.iloc [0:463714, 1: 91]
+y_train= df.iloc[0:463714, 0]
+x_test=df.iloc [463714:515344, 1: 91]
+y_test= df.iloc [463714:515344, 0]
+
+xgb= XGBRegressor()
+xgb.fit(x_train, y_train)
+y_pred= xgb.predict(x_test)
+print(metrics.mean_squared_error(y_test, y_pred))
+print(metrics.r2_score(y_test, y_pred))
+
+87.5246152135
+0.256779195809
+
+df= pd.DataFrame(y_pred, y_test)
+df
