@@ -1,3 +1,5 @@
+#pre processing the sentence and removing stop words
+
 """ Input paragraph for our pre-processing """
 my_para = "I bought a Phone today...          The phone is very nice :)      "
  
@@ -28,7 +30,7 @@ print my_para
 # i bought a phone today. the phone is very nice #
 
  
-""" Import‌ing the necessary modules for stopwords removal"""
+""" Imporing the necessary modules for stopwords removal"""
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 eng_stopwords = stopwords.words('english')     ## eng_stopwords is the list of english stopwords
@@ -40,3 +42,29 @@ wordList = word_tokenize(my_para)                                     ## Tokeniz
 wordList = [word for word in wordList if word not in eng_stopwords]   ## Removing the stopwords
 print wordList
 # ['bought', 'phone', 'today', '.', 'phone', 'nice'] # 
+
+
+
+
+
+
+
+
+
+#splitting the para into sentence and then words
+
+""" Input paragraph """
+my_para = "This is first sentence. And this is second."
+
+""" splitting the paragraph into sentences using split funtion """
+sentences_list = my_para.strip().split(".")
+
+""" Getting the first sentence from the output and printing it """
+first_sentence = sentences_list[0]
+print first_sentence
+# This is first sentence #
+
+""" Splitting the first sentence into words using split function again """
+words_list = first_sentence.strip().split(" ")
+print words_list
+# ['This', 'is', 'first', 'sentence'] # 
